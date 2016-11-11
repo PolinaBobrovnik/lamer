@@ -1,0 +1,25 @@
+.comments {
+    margin-left: 30px;
+    margin-top: 30px;
+}
+
+    .comment {
+        margin-bottom: 4px;
+        background: whitesmoke;
+        border: 1px solid black;
+        border-radius: 5px;
+    }
+
+    .comment-form {
+        display: inline-block;
+    }
+
+    .comment_author {
+        padding: 3px;
+        margin: 2px;
+    }
+
+    .comment_text { 
+        padding: 3px;
+        margin: 2px;
+    }

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>LamerNews</title>
+    <link rel="stylesheet" href="style/bootstrap.min.css">
+    <link rel="stylesheet" href="style/index.css">
+    <link rel="stylesheet" href="style/comments.css">
+</head>
+<body ng-app="app">
+    <div id='main' class="container">
+        <nav class="navbar-fluid navbar-default navbar-fixed-top">
+            <div class="container">
+                <a class="navbar-brand" href="#/"> Lamer News! </a>
+                <p class="navbar-text"> MEAN stack</p>
+                <p class="navbar-right navbar-text" ng-hide="authenticated">
+                    <a href="#/login">Login</a> or <a href="#/register">Register</a></p>
+                <p class="navbar-right navbar-text" ng-show="authenticated">
+                    <a href="#" ng-click="signout()">
+                        Logout
+                    </a>
+                </p>
+                <p class="navbar-right navbar-text" ng-show="authenticated">
+                    Signed in as {{current_user}}
+                </p>
+            </div>
+        </nav>
+
+        <div class="col-md-offset-2 col-md-8">
+            <div ng-view>
+            </div>
+        </div>
+    </div>
+
+    <script src="node_modules/angular/angular.js"></script>
+    <script src="node_modules/angular-route/angular-route.js"></script>
+    <script src="node_modules/angular-resource/angular-resource.js"></script>
+    <script src="scripts/index.js"></script>
+</body>
+</html>
