@@ -1,2 +1,5 @@
+npm install
+npm start
+
 fg - continue process, if you stop it by ctrl+z
-to kill process use ctrl+c
+to stop server ctrl+c
