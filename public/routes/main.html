@@ -10,25 +10,36 @@
 </div>
 <div id="post-stream">
     <h4>Articles</h4>
-    <div class="post" ng-repeat="article in articles | orderBy:'created_at':false"
-         ng-class-odd="'odd'" ng-class-even="'even'">
-        <div ng-click="showComments = !showComments">
-            <p>{{article.title}}</p>
-            <a href="{{article.link}}">{{article.link}}</a>
-            <br>
-            <small>Posted by @{{article.author_username}}</small>
-            <small class="pull-right">{{article.creation_date | date:"h:mma 'on' MMM d, y"}}</small>
-        </div>
-        <ul class="comments" ng-show="showComments">
-            <li class="comment" ng-repeat="comment in article.comments">
-                <strong class="comment_author">{{comment.author_username}}</strong>
-                <div class="comment_text">{{comment.text}}</div>
-            </li>
-            <form class="comment-form" ng-Submit="postComment(article)" ng-show="authenticated">
-                <textarea required class="form-control" maxlength="200"
-                    rows="1" placeholder="Message" ng-model="newComment.text"></textarea>
-                <input class="btn submit-btn pull-right" type="submit" value="Send comment!" />
-            </form>
-        </ul>
+    <ul class="comments">
+        <li class="comment" ng-repeat="(clI, client) in clients"
+            ng-class="clI === selectedIndex && 'selectedClient'"
+            ng-click="onClientClick(clI)"
+        >
+            <strong class="comment_author">{{client.name}}</strong>
+            <!-- <div class="comment_text">{{comment.text}}</div> -->
+        </li>
+    </ul>
+    <ul class="comments">
+        <li class="comment" ng-repeat="(itI, item) in items"
+            
+            ng-class="selectedItemsIds.indexOf(item._id) !== -1 && 'selectedItem'"
+        >
+            <div >
+                <strong class="comment_author"
+                        ng-click="onItemClick(item)"
+                >{{item.name}}</strong>
+                <span class="comment_text" ng-show="selectedItemsIds.indexOf(item._id) !== -1">
+                    <input type="number">
+                </span>
+            </div>
+        </li>
+    </ul>
+
+    <button ng-click="handleCalculatePrice($event)">Calculate price</button>
+
+    <div class="cart">
+        <span class="price">
+            {{total_price}}
+        </span>
     </div>
 </div>

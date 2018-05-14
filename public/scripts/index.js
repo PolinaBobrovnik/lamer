@@ -2,14 +2,7 @@
  * Created by vittal on 28.7.16.
  */
 var app = angular.module('app', ['ngRoute', 'ngResource']).run(function ($rootScope, $http) {
-    $rootScope.authenticated = false;
-    $rootScope.current_user = '';
-    
-    $rootScope.signout = function(){
-        $http.get('auth/signout');
-        $rootScope.authenticated = false;
-        $rootScope.current_user = '';
-    };
+
 });
 
 app.config (function ($routeProvider) {
@@ -19,81 +12,57 @@ app.config (function ($routeProvider) {
             templateUrl: 'routes/main.html',
             controller: 'mainController'
         })
-        //the login display
-        .when('/login', {
-            templateUrl: 'routes/login.html',
-            controller: 'authController'
-        })
-        //the signup display
-        .when('/register', {
-            templateUrl: 'routes/register.html',
-            controller: 'authController'
-        });
+        .otherwise("/")
 });
 
-app.factory('postService', function($http, $resource){
-     return $resource('/articles/');
-});
-
-app.factory('getArticlesService', function ($http, $resource) {
-    return $resource('articles/0/10?top');
-});
-
-app.factory('updateArticle', function ($http, $resource) {
-    return $resource('/articles/:id', null, {
-        'update': {method: 'PUT'}
-    });
-});
-
-app.controller('mainController', function(updateArticle, postService, getArticlesService, $scope, $rootScope){
-    $scope.articles = getArticlesService.query();
-    $scope.newArticle = {author_username: '', creation_date: '', title: '', link: ''};
-    
-    $scope.post = function() {
-        $scope.newArticle.author_username = $rootScope.current_user;
-        $scope.newArticle.creation_date = Date.now();
-        postService.save($scope.newArticle, function(){
-            $scope.articles = getArticlesService.query();
-            $scope.articles.push($scope.newArticle);
-            $scope.newArticle = {author_username: '', creation_date: '', title: '', link: ''};
-        });
-    };
-
-    $scope.newComment = {author_username: $rootScope.current_user, text: ''};
-    $scope.postComment = function (article) {
-        article.comments.push($scope.newComment);
-        updateArticle.update({id: article._id}, article, function () {
-            $scope.newComment = {author_username: $rootScope.current_user, text: ''};
-        });
+app.controller('mainController', function ($scope, $rootScope, $http){
+    $scope.items = [];
+    $scope.selectedItems = [];
+    $scope.selectedItemsIds = [];
+    $scope.onItemClick = function (item) {
+        let index = $scope.selectedItems.map(item => item._id).indexOf(item._id);
+        if (index === -1) {
+            $scope.selectedItems.push(item);
+        } else {
+            $scope.selectedItems.splice(index, 1);
+        }
+        $scope.selectedItemsIds = $scope.selectedItems.map(item => item._id);
     }
-});
-
-app.controller ('authController', function ($scope, $http, $rootScope, $location) {
-    $scope.user = {username: '', password: ''};
-    $scope.error_message = '';
-    
-    $scope.register = function () {
-        $http.post('/auth/signup', $scope.user).success(function (data) {
-            if (data.state == 'success') {
-                $rootScope.authenticated = true;
-                $rootScope.current_user = data.user.username;
-                $location.path('/');
-            } else {
-                $scope.error_message = data.message;
-            }
+    $http.get("/items")
+        .then(function (response) {
+            $scope.items = response.data;
         });
-    };
-    
-    $scope.login = function () {
-        $http.post('/auth/login', $scope.user).success(function(data){
-            if(data.state == 'success'){
-                $rootScope.authenticated = true;
-                $rootScope.current_user = data.user.username;
-                $location.path('/');
-            }
-            else{
-                $scope.error_message = data.message;
-            }
+
+    $scope.clients = [];
+    $scope.selectedIndex = null;
+    $scope.onClientClick = function (clientIndex) {
+        $scope.selectedIndex = clientIndex;
+    }
+    $http.get("/clients")
+        .then(function (response) {
+            $scope.clients = response.data;
+        }); 
+
+    $scope.total_price = 0;   
+    $http.post("/price", {
+        data: {
+            selectedItems: $scope.selectedItems,
+            client: $scope.clients[$scope.selectedIndex]
+        }
+    })
+        .then(function (response) {
+            $scope.total_price = response.data;
         });  
-    }
+
+    $scope.handleCalculatePrice = function (event) {
+        $http.post("/price", {
+            data: {
+                selectedItems: $scope.selectedItems,
+                client: $scope.clients[$scope.selectedIndex]
+            }
+        })
+            .then(function (response) {
+                $scope.total_price = response.data;
+            });
+    }    
 });

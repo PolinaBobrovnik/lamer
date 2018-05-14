@@ -18,32 +18,56 @@ app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
 var mongoose = require('mongoose');                         //add for Mongo support
-mongoose.connect('mongodb://localhost/test-lamer');              //connect to Mongo
+mongoose.connect('mongodb://localhost/price-calculator');              //connect to Mongo
 
 var session = require('express-session');
 app.use(session({
     secret: 'keyboard cat'
 }));
 
-var passport = require('passport');
+// require('./app/models/User.js');
+// require('./app/models/Article.js');
+require('./app/models/Item.js');
+require('./app/models/Client.js');
 
-app.use(passport.initialize());
-app.use(passport.session());
-
-require('./app/models/User.js');
-require('./app/models/Article.js');
-
-//// Initialize Passport
-var initPassport = require('./passport-init');
-initPassport(passport);
-
-var authenticate = require('./app/routes/authenticate.js')(passport);
 app.use('/', require('./app/routes/index.js'));
-app.use('/auth', authenticate);
-app.use('/articles', require('./app/routes/articleRoutes.js'));
-app.use('/users', require('./app/routes/userRoutes.js'));
+
+var ItemModel = mongoose.model('Item');
+
+app.use('/items', (req, res) => {
+    ItemModel.find({}, (err, items) => {
+        res.send(items)
+    })
+});
+
+// var clients = [{ name: "alex" }, { name: "oleg" }];
+var ClientModel = mongoose.model('Client');
+
+app.use('/clients', (req, res) => {
+    ClientModel.find({}, (err, clients) => {
+        res.send(clients);
+    })
+});
+
+function calculator (length, obj) {
+    return 100 * (length || 0);
+}
+
+// app.use('/price', (req, res) => {
+//     res.send(JSON.stringify(calculator(10*100)));
+// });
+
+app.post('/price', (req, res) => {
+    res.send(JSON.stringify(calculator(req.body.data.selectedItems.length)));
+});
+        
+app.use('*', (req, res) => {
+    res.send("not catched")
+});
+// app.use('/articles', require('./app/routes/articleRoutes.js'));
+// app.use('/users', require('./app/routes/userRoutes.js'));
 
 
 app.listen(28017, function () {
-    console.log('app listening on port');
+    console.log('app listening on port 28017');
 });

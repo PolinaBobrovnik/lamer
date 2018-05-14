@@ -58,7 +58,8 @@ module.exports = function (passport) {
                   var newUser = new User();
 
                   newUser.username = username;
-                  newUser.password = createHash(password);
+                //   newUser.password = createHash(password);
+                  newUser.password = password;
                   newUser.email = req.body.email;
 
                   newUser.save(function(err) {
@@ -75,10 +76,12 @@ module.exports = function (passport) {
     ));
     
     var isValidPassword = function(user, password){
-        return bCrypt.compareSync(password, user.password);
+        // return bCrypt.compareSync(password, user.password);
+        return password == user.password;
     };
     // Generates hash using bCrypt
     var createHash = function(password){
-        return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
+        // return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
+        return password;
     };
 };
