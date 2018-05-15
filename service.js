@@ -49,8 +49,20 @@ app.use('/clients', (req, res) => {
     })
 });
 
-function calculator (length, obj) {
-    return 100 * (length || 0);
+function calculator (data) {
+    let discout = 0; //%
+    if(data.client.sum === 0) {
+        discout = 0.1;
+    } else if(data.client.sum >=  1000) {
+        discout = 0.05;
+    } else if(data.client.sum >=  2000) {
+        discout = 0.07;
+    } else if(data.client.sum >=  2000) {
+        discout = 0.07;
+    }
+    let orderPrice = data.selectedItems.map( item => item.price * item.quantity ).reduce( (sum, current) => (sum + current) );
+      
+    return discout*orderPrice;
 }
 
 // app.use('/price', (req, res) => {
@@ -58,7 +70,7 @@ function calculator (length, obj) {
 // });
 
 app.post('/price', (req, res) => {
-    res.send(JSON.stringify(calculator(req.body.data.selectedItems.length)));
+    res.send(JSON.stringify(calculator(req.body.data)));
 });
         
 app.use('*', (req, res) => {

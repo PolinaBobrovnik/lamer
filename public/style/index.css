@@ -52,3 +52,7 @@ li.selectedClient {
 li.selectedItem {
     background: red;
 }
+
+ul {
+    list-style: none;
+}

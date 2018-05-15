@@ -10,6 +10,9 @@
 </div>
 <div id="post-stream">
     <h4>Articles</h4>
+    <label for="new_client">Добавление нового клиента</label><br>
+    <input id="new_client" type="text" placeholder="Введите имя" name="name" ng-model="newCient.value" />
+    <button ng-click="onAddNewClientClick(newCient.value)">Добавить</button>
     <ul class="comments">
         <li class="comment" ng-repeat="(clI, client) in clients"
             ng-class="clI === selectedIndex && 'selectedClient'"
@@ -29,6 +32,7 @@
                         ng-click="onItemClick(item)"
                 >{{item.name}}</strong>
                 <span class="comment_text" ng-show="selectedItemsIds.indexOf(item._id) !== -1">
+                    <input type="number" ng-model="" />
                     <input type="number">
                 </span>
             </div>

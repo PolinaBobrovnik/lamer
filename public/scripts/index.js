@@ -19,6 +19,8 @@ app.controller('mainController', function ($scope, $rootScope, $http){
     $scope.items = [];
     $scope.selectedItems = [];
     $scope.selectedItemsIds = [];
+
+
     $scope.onItemClick = function (item) {
         let index = $scope.selectedItems.map(item => item._id).indexOf(item._id);
         if (index === -1) {
@@ -34,6 +36,10 @@ app.controller('mainController', function ($scope, $rootScope, $http){
         });
 
     $scope.clients = [];
+    $scope.newCient = {value: null};
+    $scope.onAddNewClientClick = function (value) {
+        $scope.clients.unshift({name: value, sum: 0});
+    }
     $scope.selectedIndex = null;
     $scope.onClientClick = function (clientIndex) {
         $scope.selectedIndex = clientIndex;
