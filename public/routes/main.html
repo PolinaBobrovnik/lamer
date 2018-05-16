@@ -32,14 +32,13 @@
                         ng-click="onItemClick(item)"
                 >{{item.name}}</strong>
                 <span class="comment_text" ng-show="selectedItemsIds.indexOf(item._id) !== -1">
-                    <input type="number" ng-model="" />
-                    <input type="number">
+                    <input type="number" ng-model="quantity['item_' + itI]" />
                 </span>
             </div>
         </li>
     </ul>
 
-    <button ng-click="handleCalculatePrice($event)">Calculate price</button>
+    <button ng-click="handleCalculatePrice(quantity)">Calculate price</button>
 
     <div class="cart">
         <span class="price">

@@ -57,8 +57,6 @@ function calculator (data) {
         discout = 0.05;
     } else if(data.client.sum >=  2000) {
         discout = 0.07;
-    } else if(data.client.sum >=  2000) {
-        discout = 0.07;
     }
     let orderPrice = data.selectedItems.map( item => item.price * item.quantity ).reduce( (sum, current) => (sum + current) );
       

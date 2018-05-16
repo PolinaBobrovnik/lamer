@@ -19,7 +19,10 @@ app.controller('mainController', function ($scope, $rootScope, $http){
     $scope.items = [];
     $scope.selectedItems = [];
     $scope.selectedItemsIds = [];
-
+    $scope.quantity = {};
+    // setInterval(() => {
+    //     console.log('$scope.quantity', $scope.quantity);
+    // }, 1000);
 
     $scope.onItemClick = function (item) {
         let index = $scope.selectedItems.map(item => item._id).indexOf(item._id);
@@ -37,6 +40,7 @@ app.controller('mainController', function ($scope, $rootScope, $http){
 
     $scope.clients = [];
     $scope.newCient = {value: null};
+    // $scope.quantity = {value: null};
     $scope.onAddNewClientClick = function (value) {
         $scope.clients.unshift({name: value, sum: 0});
     }
@@ -60,10 +64,14 @@ app.controller('mainController', function ($scope, $rootScope, $http){
             $scope.total_price = response.data;
         });  
 
-    $scope.handleCalculatePrice = function (event) {
+    $scope.handleCalculatePrice = function (quantity) {
         $http.post("/price", {
             data: {
-                selectedItems: $scope.selectedItems,
+                selectedItems: $scope.selectedItems.map((item, index) => {
+                    let itemCopy = Object.assign({}, item);
+                    itemCopy.quantity = quantity['item_' + index];
+                    return itemCopy;
+                }),
                 client: $scope.clients[$scope.selectedIndex]
             }
         })
