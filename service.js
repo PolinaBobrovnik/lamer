@@ -1,6 +1,3 @@
-/**
- * Created by vittal on 20.7.16.
- */
 var express = require('express');
 var app = express();
 var router = express.Router();
@@ -25,12 +22,7 @@ app.use(session({
     secret: 'keyboard cat'
 }));
 
-// require('./app/models/User.js');
-// require('./app/models/Article.js');
 require('./app/models/Item.js');
-require('./app/models/Client.js');
-
-app.use('/', require('./app/routes/index.js'));
 
 var ItemModel = mongoose.model('Item');
 
@@ -40,43 +32,32 @@ app.use('/items', (req, res) => {
     })
 });
 
-// var clients = [{ name: "alex" }, { name: "oleg" }];
-var ClientModel = mongoose.model('Client');
-
-app.use('/clients', (req, res) => {
-    ClientModel.find({}, (err, clients) => {
-        res.send(clients);
-    })
-});
-
 function calculator (data) {
-    let discout = 0; //%
-    if(data.client.sum === 0) {
-        discout = 0.1;
-    } else if(data.client.sum >=  1000) {
-        discout = 0.05;
-    } else if(data.client.sum >=  2000) {
-        discout = 0.07;
-    }
-    let orderPrice = data.selectedItems.map( item => item.price * item.quantity ).reduce( (sum, current) => (sum + current) );
-      
-    return discout*orderPrice;
+    let priceWithoutDiscount = 0;
+    let totalDiscount = 0;
+    data.selectedItems.map( function(item) {
+        let price = item.fixedCost + item.variableCost + item.profit;
+        priceWithoutDiscount += price*item.quantity;
+        let discount = ((item.quantity * ( item.profit + (( item.fixedCost + item.variableCost )*( 1-( item.variableCost / (item.fixedCost + item.variableCost))))))/(item.quantity+1)).toFixed(2);
+        totalDiscount += +discount; 
+    });
+    let price = (priceWithoutDiscount-totalDiscount).toFixed(2);
+    const allData = {totalDiscount: totalDiscount.toFixed(2), price: price};
+    return allData;
 }
-
-// app.use('/price', (req, res) => {
-//     res.send(JSON.stringify(calculator(10*100)));
-// });
 
 app.post('/price', (req, res) => {
     res.send(JSON.stringify(calculator(req.body.data)));
+});
+
+app.post('/newItem', (req, res) => {
+    ItemModel.create(req.body.data.item);
+    res.send("Ok");
 });
         
 app.use('*', (req, res) => {
     res.send("not catched")
 });
-// app.use('/articles', require('./app/routes/articleRoutes.js'));
-// app.use('/users', require('./app/routes/userRoutes.js'));
-
 
 app.listen(28017, function () {
     console.log('app listening on port 28017');

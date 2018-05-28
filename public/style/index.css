@@ -1,5 +1,4 @@
 body {
-    padding-top:70px;
     width: 100%;
     height: 100%;
     width: 100%;
@@ -7,20 +6,50 @@ body {
     font-family: "Source Sans Pro","Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 
-a {
-    color: #00B7FF;
+.flex-container {
+    display: flex;
+    flex-direction: row;
 }
 
 .submit-btn {
-    background-color: #b1dbff;
-    margin: 10px 0 10px 0;
+    font-weight: 700;
+    color: white;
+    text-decoration: none;
+    padding: .8em 1em calc(.8em + 3px);
+    border-radius: 3px;
+    background: rgb(64,199,129);
+    box-shadow: 0 -3px rgb(53,167,110) inset;
+    transition: 0.2s;
+    outline: 0;
+    border: none;
+} 
+
+.btn-price {
+    width: 150px;
+    margin: 30px 25px 20px;
+}
+
+.cart-price{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.submit-btn:hover { 
+    background: rgb(53, 167, 110); 
+    outline: 0;
+}
+
+.submit-btn:active {
+    background: rgb(33,147,90);
+    box-shadow: 0 3px rgb(33,147,90) inset;
+    outline: 0;
 }
 
 .post {
     margin-bottom: 5px;
     border-radius: 5px;
 }
-
 .odd {
     background-color: #f2f9ff;
 
@@ -29,30 +58,112 @@ a {
     background-color: #eceff3;
 }
 
-.form-auth {
-    max-width: 330px;
-    padding: 5px;
-    margin: 0 auto;
-}
-
 .cart {
-    position: fixed;
-    display: inline-block;
-    left: 0;
-    top: 15%;
+    display: block;
+    flex: none;
     height: 200px;
     width: 200px;
-    background: #b1dbff;
+    background: rgba(33, 147, 90, 0.25);
 }
 
-li.selectedClient {
-    background: red;
+.items {
+    width: 100%;
 }
-
-li.selectedItem {
-    background: red;
+li.item {
+    margin-bottom: 6px;
+    height: 30px;
 }
+li.item  div {
+    top: 0px;
 
+}
+.item {
+    display: flex;
+    align-items: center;
+    
+}
+body {
+    display: inline-block;
+    width: 69%;
+    padding: 0 15%;
+}
 ul {
+    padding: 0;
+}
+li {
     list-style: none;
+}
+
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+    height: 300px;
+    max-width: 500px;
+}
+
+.modal-content input {
+    margin: 10px;
+    width: 80%;
+}
+
+.modal-content button {
+    margin: 10px;
+}
+
+.warning {
+    color: red;
+}
+
+/* The Close Button */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.comment {
+    padding: 3px;
+    margin: 2px;
+    margin-bottom: 4px;
+    background: whitesmoke;
+    border: 1px solid black;
+    border-radius: 5px;
+    min-width: 100px;
+    overflow: hidden; 
+}
+.comment-form {
+    display: inline-block;
+}
+.comment_author {
+    padding: 3px;
+    margin: 2px;
+}
+.comment_text { 
+    padding: 3px;
+    margin: 2px;
 }

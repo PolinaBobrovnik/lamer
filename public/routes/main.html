@@ -1,48 +1,51 @@
-<div class="clearfix">
-    <form ng-Submit="post()" ng-show="authenticated">
-        <h4>{{current_user}} says</h4>
-    <textarea required class="form-control" maxlength="100"
-              rows="1" placeholder="Title" ng-model="newArticle.title"></textarea>
-    <textarea required class="form-control" maxlength="100"
-              rows="1" placeholder="Link" ng-model="newArticle.link"></textarea>
-        <input class="btn submit-btn pull-right" type="submit" value="Chirp!" />
-    </form>
-</div>
 <div id="post-stream">
-    <h4>Articles</h4>
-    <label for="new_client">Добавление нового клиента</label><br>
-    <input id="new_client" type="text" placeholder="Введите имя" name="name" ng-model="newCient.value" />
-    <button ng-click="onAddNewClientClick(newCient.value)">Добавить</button>
-    <ul class="comments">
-        <li class="comment" ng-repeat="(clI, client) in clients"
-            ng-class="clI === selectedIndex && 'selectedClient'"
-            ng-click="onClientClick(clI)"
-        >
-            <strong class="comment_author">{{client.name}}</strong>
-            <!-- <div class="comment_text">{{comment.text}}</div> -->
-        </li>
-    </ul>
-    <ul class="comments">
-        <li class="comment" ng-repeat="(itI, item) in items"
-            
-            ng-class="selectedItemsIds.indexOf(item._id) !== -1 && 'selectedItem'"
-        >
-            <div >
-                <strong class="comment_author"
-                        ng-click="onItemClick(item)"
-                >{{item.name}}</strong>
-                <span class="comment_text" ng-show="selectedItemsIds.indexOf(item._id) !== -1">
-                    <input type="number" ng-model="quantity['item_' + itI]" />
-                </span>
+    <div class="header"> <h4>Программная поддержка процесса формирования цены и скидки на заказ авторемонтного предприятия</h4></div>
+            <div class="flex-container">
+                <div class="items">
+                        <button class="submit-btn" id="myBtn">Добавить товар</button>
+
+                        <!-- The Modal -->
+                        <div id="myModal" class="modal">
+                        
+                          <!-- Modal content -->
+                          <div class="modal-content">
+                                <span class="close">&times;</span>
+                                <label for="new_client">Добавление нового товара</label><br>
+                                <input id="new_client" type="text" placeholder="Введите название" name="name" ng-model="newItem.value.name" /><br>
+                                <input id="new_client" type="number" placeholder="Введите переменные издержки" name="name" ng-model="newItem.value.varCost" /><br>
+                                <input id="new_client" type="number" placeholder="Введите постоянные издержки" name="name" ng-model="newItem.value.fixedCost" /><br>
+                                <input id="new_client" type="number" placeholder="Введите прибыль" name="name" ng-model="newItem.value.profit" /><br>
+                                <button class="submit-btn" ng-click="onAddNewItemClick(newItem.value)" ng-disabled="!(newItem.value.name && newItem.value.varCost && newItem.value.fixedCost && newItem.value.profit)">Добавить товар</button>
+                                <span class="warning" ng-hide="newItem.value.name && newItem.value.varCost && newItem.value.fixedCost && newItem.value.profit">* Заполните все поля</span>
+                            </div>
+                        
+                        </div>
+
+                    <ul class="comments">
+                        <li  class="item" ng-repeat="(itI, item) in items" ng-class="selectedItemsIds.indexOf(item._id) !== -1 && 'selectedItem'">
+                                <span class="comment" ng-click="onItemClick(item)">{{item.name}}</span>
+                                <span class="comment_text" ng-style="{'visibility': selectedItemsIds.indexOf(item._id) !== -1 ?'visible':'hidden'}">
+                                    <input type="number" ng-model="quantity['item_' + itI]" />
+                                </span>
+                        </li>
+                    </ul>
+                </div>
+            <div class="cart">
+                <button class="submit-btn btn-price" ng-click="handleCalculatePrice(quantity)">Рассчитать цену</button><br>
+                <div class="cart-price">
+                    <span class="price">
+                        Цена заказа:
+                    </span>
+                    <span class="price">
+                        {{total_price}}
+                    </span>
+                    <span class="price">
+                        Размер скидки:
+                    </span>
+                    <span class="price">
+                        {{total_sale}}
+                    </span>
+                </div>
             </div>
-        </li>
-    </ul>
-
-    <button ng-click="handleCalculatePrice(quantity)">Calculate price</button>
-
-    <div class="cart">
-        <span class="price">
-            {{total_price}}
-        </span>
-    </div>
+    </div>    
 </div>
